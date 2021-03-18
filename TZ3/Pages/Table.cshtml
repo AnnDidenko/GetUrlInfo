@@ -1,0 +1,57 @@
+﻿@page
+@model TZ3.Pages.TableModel
+
+@{
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    let message = "";
+    let input = '@Model.Input';
+    if (input == '') {
+        message = 'Text area is empty!';
+    }
+    else {
+        message = "Urls' info: ";
+        let urls = input.split('&#xD;&#xA;');
+        for (var i = 0; i < urls.length; i++) {
+            $.ajax({
+                url: '/UrlResponse/Index',
+                type: 'GET',
+                data:
+                {
+                    url: urls[i]
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    var url = data.url;
+                    var content = data.title;
+                    var code = data.statusCode;
+                    $("#urls").append(
+                        "<tr><td>" + url + "</td><td>" + content + "</td><td>" + code + "</td>"
+                    );
+                }
+            });
+        }
+        
+    }
+</script>
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML  4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Information about urls</title>
+</head>
+<body>
+    <table id="urls" border="1" width="100%" cellpadding="5">
+        <tr>
+            <th>Url</th>
+            <th>Title</th>
+            <th>Status code</th>
+        </tr>
+    </table>
+</body>
+</html>
