@@ -11,32 +11,33 @@ using TZ3.Models;
 
 namespace TZ3.Controllers
 {
+    [Route("UrlResponse")]
     public class UrlResponseController : Controller
     {
-        [HttpGet()]
+        [HttpGet]
+        [Route("Index")]
         public async Task<IActionResult> Index([FromQuery] string url)
         {
-            if (url == "https://brights.io/")
-            {
-                await Task.Delay(2000);
-            }
             var client = new RestClient(url);
-            client.Timeout = -1;
 
             var request = new RestRequest(Method.GET);
-            request.AddHeader("Cookie", "_rl=1");
 
-            var response = client.Execute(request);
+            var response = await client.ExecuteAsync(request);
 
             var pattern = @"<title>.*</title>";
-            var match = Regex.Match(response.Content, pattern).ToString();
+            var match = Regex.Match(response.Content, pattern);
 
             pattern = @"(<title>)|(</title>)";
-            var title = Regex.Replace(match, pattern, string.Empty).ToString();
+            var title = Regex.Replace(match.Value, pattern, string.Empty);
 
-            var urlResponse = new UrlResponseModel(url, title, response.StatusCode);
+            var result = new UrlResponseModel
+            {
+                Url = url,
+                Title = title,
+                StatusCode = response.StatusCode,
+            };
 
-            return Ok(urlResponse);
+            return Ok(result);
         }
     }
 }
