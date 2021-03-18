@@ -1,0 +1,15 @@
+﻿@page
+@model TZ3.Pages.IndexModel
+@{
+    ViewData["Title"] = "Get titles";
+}
+
+
+
+<h1>@Model.Message</h1>
+
+
+<form method="post">
+    <p><textarea rows="20" cols="45" name="input"></textarea></p>
+    <input type="submit" value="Get information" />
+</form>
