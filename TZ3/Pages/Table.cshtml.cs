@@ -17,10 +17,6 @@ namespace TZ3.Pages
         {
             Input = input;
         }
-
-
-        public void OnPost(string url, string content, HttpStatusCode code)
-        {
-        }
+      
     }
 }
